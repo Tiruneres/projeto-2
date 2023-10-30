@@ -2,11 +2,11 @@ const form = document.getElementById ('form-atividade');
 const NomeAtividade = document.getElementById('nome-atividade');
 const NotaAtividade = document.getElementById('nota-atividade');
 const CorpoTabela = document.querySelector('tbody');
-const EmojiAprovado = `<img src="/images/aprovado.png" alt="Emoji celebrando">`;
-const EmojiReprovado = `<img src="/images/reprovado.png" alt="Emoji decepcionado">`;
+const ImgAprovado = '<img src="images/aprovado.png" alt="Emoji celebrando" />';
+const ImgReprovado = '<img src="images/reprovado.png" alt="Emoji decepcionado" />';
 const SpanAprovado = `<span class="resultado aprovado">Aprovado</span>`;
 const SpanReprovado = `<span class="resultado reprovado">Reprovado</span>`;
-let MediaMinima = prompt('Qual o valor da Média Mínima para Resultado aprovado?');
+const NotaMinima = parseFloat(prompt("Qual o valor da Média Mínima para Resultado aprovado?"));
 
 let nomesAtividade = [];
 let notasAtividade = [];
@@ -38,7 +38,7 @@ form.addEventListener('submit', function(e){
             let linha = '<tr>';
             linha += `<td> ${NomeAtividade.value}</td>`;
             linha += `<td> ${NotaAtividade.value}</td>`;
-            linha += `<td> ${NotaAtividade.value >= MediaMinima ? EmojiAprovado : EmojiReprovado}</td>`;
+            linha += `<td> ${NotaAtividade.value >= NotaMinima ? ImgAprovado : ImgReprovado }</td>`;
             linha += '</tr>';
     
             linhas += linha;
@@ -59,8 +59,8 @@ form.addEventListener('submit', function(e){
 
         const MediaValorFinal = CalculaMedia ();
 
-        document.getElementById('media-valor').innerHTML = MediaValorFinal;
-        document.getElementById('media-valor-resultado').innerHTML = MediaValorFinal >= MediaMinima ? SpanAprovado : SpanReprovado;
+        document.getElementById('media-valor').innerHTML = MediaValorFinal.toFixed(2);
+        document.getElementById('media-valor-resultado').innerHTML = MediaValorFinal >= NotaMinima ? SpanAprovado : SpanReprovado;
         
     }
 
