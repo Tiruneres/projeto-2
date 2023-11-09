@@ -1,83 +1,77 @@
-const form = document.getElementById ('form-atividade');
+const form = document.getElementById('form-atividade');
 const NomeAtividade = document.getElementById('nome-atividade');
 const NotaAtividade = document.getElementById('nota-atividade');
 const CorpoTabela = document.querySelector('tbody');
-const ImgAprovado = '<img src="images/aprovado.png" alt="Emoji celebrando" />';
-const ImgReprovado = '<img src="images/reprovado.png" alt="Emoji decepcionado" />';
-const SpanAprovado = `<span class="resultado aprovado">Aprovado</span>`;
-const SpanReprovado = `<span class="resultado reprovado">Reprovado</span>`;
-const NotaMinima = parseFloat(prompt("Qual o valor da Média Mínima para Resultado aprovado?"));
-
-let nomesAtividade = [];
-let notasAtividade = [];
-
 let linhas = '';
+const EmojiAprovado = '<img src="images/aprovado.png" alt="Emoji celebrando" />';
+const EmojiReprovado = '<img src="images/reprovado.png" alt="Emoji decepcionado" />';
+const MediaValor = document.getElementById('media-valor');
+const MediaValorResultado = document.getElementById('media-valor-resultado');
+let notas = [];
+let atividades = [];
+const SpanAprovado = '<span class="resultado aprovado">Aprovado</span>';
+const SpanReprovado = '<span class="resultado reprovado">Reprovado</span>';
 
-form.addEventListener('submit', function(e){
+const NotaMinima = parseFloat(prompt ('Qual a nota Mínima para resultado Aprovado?'));
+
+form.addEventListener('submit', function (e){
     e.preventDefault();
-
-    AdicionaLinha();
+    
+    AdicionaLinha ();
     CalculaMedia ();
-    AtualizaMedia();
+    AtualizaMedia ();
 })
+    
+console.log (NotaMinima);
 
-    
+function AdicionaLinha (){
 
-    function AdicionaLinha(){
+    if (atividades.includes(NomeAtividade.value)){
 
-        if (nomesAtividade.includes(NomeAtividade.value)){
+        alert ('esta atividade ja está inclusa!');
 
-            alert(`A Atividade : ${NomeAtividade.value} ja está inclusa!`);
-
-        } else {
-            
-            notasAtividade.push(parseFloat(NotaAtividade.value));
-            nomesAtividade.push(NomeAtividade.value);
-    
-    
-            let linha = '<tr>';
-            linha += `<td> ${NomeAtividade.value}</td>`;
-            linha += `<td> ${NotaAtividade.value}</td>`;
-            linha += `<td> ${NotaAtividade.value >= NotaMinima ? ImgAprovado : ImgReprovado }</td>`;
-            linha += '</tr>';
-    
-            linhas += linha;
-    
-            CorpoTabela.innerHTML = linhas;
-    
-            
-        }
+    } else {
         
-        NomeAtividade.value = '';
-        NotaAtividade.value = '';
+        atividades.push(NomeAtividade.value);
+        notas.push(parseFloat(NotaAtividade.value));
+    
+        
+    
+        let linha = '<tr>';
+        linha += `<td>${NomeAtividade.value}</td>`;
+        linha += `<td>${NotaAtividade.value}</td>`;
+        linha += `<td>${NotaAtividade.value >= NotaMinima ? EmojiAprovado :  EmojiReprovado}</td>`;
+        linha += '</tr>';
+    
+        linhas += linha;
+    
+        CorpoTabela.innerHTML = linhas;
 
     }
 
+    NomeAtividade.value = '';
+    NotaAtividade.value = '';
+
+}
 
 
-    function  AtualizaMedia(){
+function AtualizaMedia (){
+    const mediaFinal = CalculaMedia ();
+    MediaValor.innerHTML = mediaFinal.toFixed(2);
+    MediaValorResultado.innerHTML = mediaFinal >= NotaMinima ? SpanAprovado : SpanReprovado ;
 
-        const MediaValorFinal = CalculaMedia ();
+}
 
-        document.getElementById('media-valor').innerHTML = MediaValorFinal.toFixed(2);
-        document.getElementById('media-valor-resultado').innerHTML = MediaValorFinal >= NotaMinima ? SpanAprovado : SpanReprovado;
+function CalculaMedia (){
+
+    let SomaDasNotas = 0;
+    
+    for (let i = 0; i < notas.length; i++ ){
         
-    }
-
-    function CalculaMedia (){
-        let SomaDasNotas = 0;
-
-        for (let i =0; i < notasAtividade.length; i++ ){
-
-            SomaDasNotas += notasAtividade[i];
-
-            
-
-        }
-
-        return SomaDasNotas / notasAtividade.length;
+        SomaDasNotas += notas[i];
         
-        
-
     }
     
+    return  SomaDasNotas / notas.length;
+    
+}
